@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon rapport tour de taille / taille</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#faf7ee;color:#203d2b;font-family:Arial,sans-serif;padding:22px}
+main{max-width:500px;margin:25px auto}
+h1{text-align:center;font-size:27px;line-height:1.25}
+.subtitle{text-align:center;color:#617365;font-size:17px}
+.card{background:white;border:1px solid #e5e4d8;border-radius:20px;padding:24px;margin-top:26px}
+label{display:block;font-weight:bold;margin:17px 0 8px}
+input{width:100%;font-size:19px;padding:14px;border:1px solid #bfc9bd;border-radius:10px}
+button{width:100%;padding:17px;margin-top:25px;background:#203d2b;color:white;border:0;border-radius:12px;font-size:17px;font-weight:bold}
+#resultat{display:none;margin-top:22px;padding:18px;background:#edf4ec;border-radius:12px;line-height:1.6}
+.valeur{font-size:36px;font-weight:bold;text-align:center}
+small{display:block;color:#59685b;line-height:1.5;margin-top:20px}
+</style>
+</head>
+<body>
+<main>
+<h1>Mon rapport tour de taille / taille</h1>
+<p class="subtitle">J'évalue mon risque cardio-métabolique</p>
+<div class="card">
+<p>Renseignez vos deux mesures en centimètres pour connaître votre rapport tour de taille / taille.</p>
+<label for="tour">Mon tour de taille (cm)</label>
+<input id="tour" type="number" inputmode="decimal" min="1" step="any" placeholder="Exemple : 85">
+<label for="taille">Ma taille (cm)</label>
+<input id="taille" type="number" inputmode="decimal" min="1" step="any" placeholder="Exemple : 170">
+<button type="button" onclick="calculer()">Calculer mon rapport</button>
+<div id="resultat" role="status" aria-live="polite"></div>
+<small>Mesurez votre tour de taille à mi-distance entre la dernière côte et le haut de la hanche, après une expiration normale.</small>
+</div>
+<small>Indicateur destiné principalement aux adultes. Il renseigne sur l'adiposité abdominale associée au risque cardio-métabolique, mais ne constitue pas un diagnostic. Les mesures restent dans cette page et ne sont pas enregistrées ni transmises.</small>
+</main>
+<script>
+function calculer(){
+const tour=Number(document.getElementById('tour').value);
+const taille=Number(document.getElementById('taille').value);
+const bloc=document.getElementById('resultat');
+bloc.style.display='block';
+if(!tour||!taille||tour<=0||taille<=0){
+bloc.textContent='Veuillez saisir deux mesures valides en centimètres.';
+return;
+}
+const rapport=tour/taille;
+let titre,conseil;
+if(rapport<0.5){
+titre='Repère favorable';
+conseil='Votre rapport est inférieur à 0,50. Continuez vos habitudes favorables à la santé.';
+}else if(rapport<0.6){
+titre='Adiposité abdominale augmentée';
+conseil='Votre rapport se situe entre 0,50 et 0,59. Une attention à l’activité physique, à l’alimentation et aux autres facteurs de risque est utile.';
+}else{
+titre='Adiposité abdominale élevée';
+conseil='Votre rapport est supérieur ou égal à 0,60. Un échange avec un professionnel de santé est conseillé pour évaluer les autres facteurs de risque.';
+}
+bloc.replaceChildren();
+const valeur=document.createElement('div');
+valeur.className='valeur';
+valeur.textContent=rapport.toFixed(2).replace('.',',');
+const titreElement=document.createElement('strong');
+titreElement.textContent=titre;
+const texte=document.createElement('p');
+texte.textContent=conseil;
+bloc.append(valeur,titreElement,texte);
+}
+</script>
+</body>
+</html>
